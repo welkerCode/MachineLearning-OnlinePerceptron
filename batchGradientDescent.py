@@ -76,15 +76,16 @@ def batchGradientDescent(r, max_t, epsilon):
 
             # Check for convergence
             if converges(curIterWeights, prevIterWeights, epsilon):
-
-                plotCost(costs, "Batch Gradient Descent")
-                return str(curIterWeights), str(r)
+                finalCost = calcCost(trainingData,curIterWeights)
+                plotCost(costs, "Batch Gradient Descent", "Time Steps")
+                analyticalWeight = calcAnalyticalWeight(trainingData)
+                return str(curIterWeights), str(r), str(finalCost), str(analyticalWeight)
 
         # If no convergence, then reduce r by half and try again (as long as r > epsilon)
         #plotCost(costs, "Batch Gradient Descent" + str(r))
         r = r/2
 
-    plotCost(costs, "Batch Gradient Descent")
+    plotCost(costs, "Batch Gradient Descent", "Time Steps")
     return str(curIterWeights), str(r)
 
 
@@ -94,6 +95,8 @@ if __name__ == "__main__":
     r = 0.001  # This is the initial learning rate
     epsilon = .002  # This is the tolerance to determine convergence
     max_t = 100  # This is the max number of weight training iterations we will give to each learning rate
-    batchWeights, batchLearningRate = batchGradientDescent(r, max_t, epsilon)
+    batchWeights, batchLearningRate, finalCost, analyticalWeight = batchGradientDescent(r, max_t, epsilon)
     print "Weight vector: " + batchWeights
     print "Learning rate: " + batchLearningRate
+    print "Final cost: " + finalCost
+    print "Analytical Weight: " + analyticalWeight

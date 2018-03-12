@@ -49,6 +49,20 @@ def getYiXi(example):
     xi.append(1.0) # For the bias term
     return yi, xi
 
+def calcAnalyticalWeight(data):
+    X_array = []
+    Y_array = []
+    # I learned that to properly use np operations, the data must be float rather than string.  The debugging help came from
+    # https:stackoverflow.com/questions/26618333/valueerror-data-type-must-provide-an-itemsize
+    for example in data.getExampleList():
+        Yi, Xi = getYiXi(example)
+        X_array.append(Xi)
+        Y_array.append(Yi)
+    X = np.transpose(np.matrix(X_array))
+    Y = np.transpose(np.matrix(Y_array))
+    w =X * np.transpose(X)
+    w = np.linalg.inv(w) * X * Y
+    return np.transpose(w)
 # This function evaluates the cost function J(w) for a given timestep
 def calcCost(data, weights):
 
@@ -68,13 +82,13 @@ def calcCost(data, weights):
 
     return Jw
 
-def plotCost(costs, title):
+def plotCost(costs, title, xaxis):
 
     # Example taken from matplotlib.org/examples/pylab_examples/simple_plot.html
     t = np.arange(0, len(costs), 1)
 
     plt.plot(t,costs)
-    plt.xlabel('time step')
+    plt.xlabel(xaxis)
     plt.ylabel('cost')
     plt.title(title)
     plt.grid(True)

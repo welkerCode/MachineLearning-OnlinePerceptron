@@ -47,21 +47,24 @@ def stochasticGradientDescent(r, max_t, epsilon):
                 costs.append(calcCost(trainingData,curIterWeights))
                 # Check for convergence
                 if converges(curIterWeights, prevIterWeights, epsilon):
-                    plotCost(costs, "Stochastic Gradient Descent")
-                    return str(curIterWeights), str(r)
+                    finalCost = calcCost(trainingData, curIterWeights)
+                    plotCost(costs, "Stochastic Gradient Descent", "Training Examples")
+                    # The analytical solution is w* = (XX^T)^-1 XY
+                    return str(curIterWeights), str(r), str(finalCost)
 
         # If no convergence, then reduce r by half and try again (as long as r > epsilon)
         r = r/2
 
-    return str(curIterWeights), str(r)
+    return str(curIterWeights), str(r), str(finalCost)
 
 
 
 if __name__ == "__main__":
     # Here are some parameters that need to be set prior to running Batch Gradient Descent
-    r = 1.0  # This is the learning rate
+    r = .25  # This is the learning rate
     epsilon = .000001  # This is the tolerance to determine convergence
     max_t = 100  # This is the max number of weight training iterations we will give to each learning rate
-    stochasticWeights, stochasticLearningRate = stochasticGradientDescent(r, max_t, epsilon)
+    stochasticWeights, stochasticLearningRate, finalCost = stochasticGradientDescent(r, max_t, epsilon)
     print "Weight vector: " + stochasticWeights
     print "Learning rate: " + stochasticLearningRate
+    print "Final cost: " + finalCost
